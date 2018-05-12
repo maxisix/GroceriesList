@@ -13,7 +13,7 @@ import {
   Icon
 } from "native-base";
 
-export default class ShoppingList extends React.Component {
+export default class ShoppingList extends Component {
   static navigationOptions = {
     title: "My Groceries List"
   };

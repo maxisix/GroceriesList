@@ -40,20 +40,18 @@ export default class AddProduct extends Component {
     });
   }
 
-  async addNewProduct(name) {
-    const newProductsList = this.state.allProducts.concat({
-      name: name,
-      id: Math.floor(Math.random() * 1000)
-    });
+  addNewProduct = async name => {
+    const id = Math.floor(Math.random() * 1000);
+    const newProductsList = [...this.state.allProducts, { name, id }];
 
     await AsyncStorage.setItem("@allProducts", JSON.stringify(newProductsList));
 
     this.setState({
       allProducts: newProductsList
     });
-  }
+  };
 
-  _handleProductPress(product) {
+  _handleProductPress = product => {
     const productIndex = this.state.productsInList.findIndex(
       p => p.id === product.id
     );
@@ -66,27 +64,27 @@ export default class AddProduct extends Component {
       this.props.navigation.state.params.deleteProduct(product);
     } else {
       this.setState({
-        productsInList: this.state.productsInList.concat(product)
+        productsInList: [...this.state.productsInList, product]
       });
       this.props.navigation.state.params.addProduct(product);
     }
-  }
+  };
 
-  _handleAddProductPress() {
+  _handleAddProductPress = () => {
     prompt(
       "Enter product name",
       "",
       [
         { text: "Cancel", style: "cancel" },
-        { text: "OK", onPress: this.addNewProduct.bind(this) }
+        { text: "OK", onPress: this.addNewProduct }
       ],
       {
         type: "plain-text"
       }
     );
-  }
+  };
 
-  async _handleRemovePress(product) {
+  _handleRemovePress = async product => {
     this.setState({
       allProducts: this.state.allProducts.filter(p => p.id !== product.id)
     });
@@ -94,7 +92,7 @@ export default class AddProduct extends Component {
       "@allProducts",
       JSON.stringify(this.state.allProducts.filter(p => p.id !== product.id))
     );
-  }
+  };
 
   render() {
     return (
@@ -110,7 +108,7 @@ export default class AddProduct extends Component {
                 );
 
                 return (
-                  <ListItem onPress={this._handleProductPress.bind(this, item)}>
+                  <ListItem onPress={this._handleProductPress.bind(null, item)}>
                     <Body>
                       <Text
                         style={{
@@ -128,7 +126,7 @@ export default class AddProduct extends Component {
                         ios="ios-remove-circle"
                         android="md-remove-circle"
                         style={{ color: "red" }}
-                        onPress={this._handleRemovePress.bind(this, item)}
+                        onPress={this._handleRemovePress.bind(null, item)}
                       />
                     </Right>
                   </ListItem>
@@ -141,7 +139,7 @@ export default class AddProduct extends Component {
         <Fab
           style={{ backgroundColor: "#5067FF" }}
           position="bottomRight"
-          onPress={this._handleAddProductPress.bind(this)}
+          onPress={this._handleAddProductPress}
         >
           <Icon name="add" />
         </Fab>
